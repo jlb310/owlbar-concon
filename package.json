@@ -1,0 +1,9 @@
+{
+  "name": "prueba123",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --noEmit && echo 'typecheck ok'",
+    "build": "tsc --noEmit && echo 'typecheck ok'"
+  }
+}
