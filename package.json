@@ -1,9 +1,6 @@
 {
-  "name": "prueba123",
+  "name": "owlbar-concon",
   "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "tsc --noEmit && echo 'typecheck ok'",
-    "build": "tsc --noEmit && echo 'typecheck ok'"
-  }
+  "description": "Landing de OWL BAR (Concón). Sitio estático: index.html, styles.css y src/main.js."
 }

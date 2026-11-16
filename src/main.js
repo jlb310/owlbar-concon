@@ -1,18 +1,65 @@
-const items=[
-{name:'Hamburguesa Owl',description:'Carne, cheddar, cebolla crispy y salsa de la casa',price:'$11.900',category:'comida'},
-{name:'Alitas BBQ',description:'8 unidades, salsa BBQ ahumada y dip de la casa',price:'$9.900',category:'comida'},
-{name:'Papas Owl',description:'Papas rústicas, cheddar, tocino y cebollín',price:'$7.900',category:'comida'},
-{name:'Gin tonic',description:'Gin, tónica premium, pomelo y romero',price:'$7.500',category:'bar'},
-{name:'Moscow mule',description:'Vodka, ginger beer, limón y menta',price:'$7.500',category:'bar'},
-{name:'Cerveza artesanal',description:'Consulta variedades disponibles hoy',price:'$4.900',category:'bar'}
+// OWL BAR · landing: carta con pedido por WhatsApp, estado abierto/cerrado y animaciones de entrada.
+const WHATSAPP = '56951645582';
+const FOTO = (id, w = 900) => `https://images.unsplash.com/photo-${id}?w=${w}&q=72&auto=format&fit=crop`;
+
+const carta = [
+  { nombre: 'Hamburguesa Owl', detalle: 'Carne, cheddar, cebolla crispy y salsa de la casa', precio: 11900, tipo: 'comida', foto: '1607013251379-e6eecfffe234', destacado: true },
+  { nombre: 'Alitas BBQ', detalle: '8 unidades, salsa BBQ ahumada y dip de la casa', precio: 9900, tipo: 'comida', foto: '1767065703745-f3c33524605a', destacado: true },
+  { nombre: 'Papas Owl', detalle: 'Papas rústicas, cheddar, tocino y cebollín', precio: 7900, tipo: 'comida', foto: '1485962398705-ef6a13c41e8f' },
+  { nombre: 'Gin tonic', detalle: 'Gin, tónica premium, pomelo y romero', precio: 7500, tipo: 'bar', foto: '1675370734208-120b43d3c7ac', destacado: true },
+  { nombre: 'Moscow mule', detalle: 'Vodka, ginger beer, limón y menta', precio: 7500, tipo: 'bar', foto: '1527628126150-086ff233b951' },
+  { nombre: 'Cerveza artesanal', detalle: 'Consulta las variedades disponibles hoy', precio: 4900, tipo: 'bar', foto: '1777558578003-e65755409d8e' },
 ];
-const menuGrid=document.querySelector('#menu-grid');const toast=document.querySelector('#toast');let toastTimer;
-function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=window.setTimeout(()=>toast.classList.remove('show'),3200)}
-function render(category='todos'){menuGrid.innerHTML=items.filter(i=>category==='todos'||i.category===category).map(i=>`<article class="menu-card"><div class="menu-card-content"><h3>${i.name}</h3><p>${i.description}</p><div class="menu-meta"><span>${i.price}</span><span class="status">Disponible</span></div></div></article>`).join('')}
-render();document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelector('.tab.active')?.classList.remove('active');t.classList.add('active');render(t.dataset.category)}));
-const status=document.querySelector('#order-status');const heroStatus=document.querySelector('#hero-status');let activeOrder=false;
-function setStatus(title,detail,kind='live'){status.innerHTML=`<span class="status-dot ${kind}"></span><div><b>${title}</b><small>${detail}</small></div>`;heroStatus.textContent=title}
-function moveToPreparing(){if(!activeOrder){showToast('Confirma primero un pedido');return}setStatus('En preparación','La cocina está trabajando en tu pedido','live');showToast('Estado actualizado: En preparación')}
-document.querySelector('#prepare-order').addEventListener('click',moveToPreparing);
-document.querySelector('#place-order').addEventListener('click',()=>{const name=document.querySelector('#customer-name').value.trim();const product=document.querySelector('#order-product').value;if(!name){showToast('Escribe tu nombre para confirmar el pedido');return}activeOrder=true;setStatus('Pedido confirmado','Avisaremos cuando pase a preparación','live');showToast(`Pedido de ${name} confirmado: ${product}`);window.setTimeout(moveToPreparing,1200)});
-document.querySelector('#cancel-order').addEventListener('click',()=>{if(!activeOrder){showToast('No tienes un pedido activo');return}activeOrder=false;setStatus('Pedido cancelado','Te avisamos antes de preparar la orden','cancelled');showToast('Cancelación confirmada · Puedes escribirnos por WhatsApp');window.open('https://wa.me/56951645582?text=Hola%20OWL%20BAR,%20mi%20pedido%20fue%20cancelado%20y%20necesito%20ayuda.','_blank','noopener,noreferrer')});
+
+const pesos = (n) => '$' + n.toLocaleString('es-CL');
+const linkPedido = (p) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola OWL BAR, quiero pedir: ${p.nombre} (${pesos(p.precio)}).`)}`;
+
+document.getElementById('destacados').innerHTML = carta.filter((p) => p.destacado).map((p) => `
+  <a class="destacado revela" href="${linkPedido(p)}" target="_blank" rel="noopener">
+    <div class="destacado-foto"><img loading="lazy" src="${FOTO(p.foto)}" alt="${p.nombre}"></div>
+    <div class="destacado-info">
+      <span class="eti">${p.tipo === 'bar' ? 'De la barra' : 'De la cocina'}</span>
+      <h3>${p.nombre}</h3>
+      <p>${p.detalle}</p>
+      <div class="destacado-pie"><b>${pesos(p.precio)}</b><span>Pedir →</span></div>
+    </div>
+  </a>`).join('');
+
+for (const tipo of ['comida', 'bar']) {
+  document.getElementById(`lista-${tipo}`).innerHTML = carta.filter((p) => p.tipo === tipo).map((p) => `
+    <li><a href="${linkPedido(p)}" target="_blank" rel="noopener">
+      <img loading="lazy" src="${FOTO(p.foto, 200)}" alt="">
+      <div class="item-texto"><span class="item-nombre">${p.nombre}</span><span class="item-detalle">${p.detalle}</span></div>
+      <span class="item-puntos" aria-hidden="true"></span>
+      <span class="item-precio">${pesos(p.precio)}</span>
+    </a></li>`).join('');
+}
+
+// Abierto / cerrado según la hora de Concón (todos los días 12:30 a 00:30, cocina hasta 23:45).
+(function estado() {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Santiago', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+    .formatToParts(new Date()).map((x) => [x.type, x.value]));
+  const m = +p.hour * 60 + +p.minute;
+  const abierto = m >= 12 * 60 + 30 || m < 30;
+  const cocina = m >= 12 * 60 + 30 && m < 23 * 60 + 45;
+  const texto = abierto
+    ? (cocina ? 'Abierto ahora · cocina hasta las 23:45' : 'Abierto ahora · barra hasta las 00:30')
+    : 'Cerrado ahora · abrimos hoy a las 12:30';
+  document.querySelectorAll('[data-estado]').forEach((el) => {
+    el.classList.toggle('abierto', abierto);
+    el.querySelector('span').textContent = texto;
+  });
+  setTimeout(estado, 60_000);
+})();
+
+// Nav con fondo al bajar.
+const nav = document.getElementById('nav');
+const alBajar = () => nav.classList.toggle('solida', scrollY > 40);
+addEventListener('scroll', alBajar, { passive: true });
+alBajar();
+
+// Aparición suave al entrar en pantalla.
+const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
+  if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+}), { rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.revela').forEach((el) => io.observe(el));
