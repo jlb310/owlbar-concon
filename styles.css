@@ -222,3 +222,12 @@ h2 { font-size: clamp(44px, 7vw, 92px); line-height: .95; margin-top: 22px; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .revela, .entra { opacity: 1; transform: none; }
 }
+
+/* Reserva por WhatsApp: el mensaje sale listo con fecha, hora y personas. */
+.reserva { display: grid; gap: 14px; width: 100%; max-width: 860px; margin-top: 44px; text-align: left; }
+@media (min-width: 760px) { .reserva { grid-template-columns: 1.3fr 1fr .8fr 1fr; align-items: end; } .reserva .boton { grid-column: 1 / -1; } }
+.reserva label { display: grid; gap: 8px; font: 600 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--tenue); }
+.reserva input, .reserva select { width: 100%; min-height: 52px; padding: 0 14px; background: var(--noche2); color: var(--crema); border: 1px solid rgba(239, 230, 214, .22); border-radius: 0; font: 400 16px var(--sans); letter-spacing: 0; text-transform: none; color-scheme: dark; }
+.reserva input:focus, .reserva select:focus { outline: 1px solid var(--oro); border-color: var(--oro); }
+.reserva-alt { margin: 22px 0 0; color: var(--tenue); font-size: 15px; }
+.reserva-alt a { color: var(--oro-claro); border-bottom: 1px solid rgba(201, 163, 106, .5); }

@@ -118,10 +118,14 @@
     <p class="eti revela">Visítanos</p>
     <h2 class="revela">Te guardamos<br><em>un lugar en la barra.</em></h2>
     <p class="seccion-bajada revela">Reservas, pedidos y consultas por WhatsApp. Te respondemos directo desde el bar.</p>
-    <div class="visita-acciones revela">
-      <a class="boton boton--oro" href="https://wa.me/56951645582?text=Hola%20OWL%20BAR%2C%20quiero%20reservar%20una%20mesa." target="_blank" rel="noopener">Reservar por WhatsApp</a>
-      <a class="boton boton--linea" href="tel:+56951645582">+56 9 5164 5582</a>
-    </div>
+    <form class="reserva revela" id="form-reserva" aria-label="Reservar una mesa">
+      <label>Nombre<input name="nombre" required autocomplete="name" placeholder="Tu nombre"></label>
+      <label>Fecha<input name="fecha" type="date" required></label>
+      <label>Hora<select name="hora"><option>13:00</option><option>19:00</option><option>20:00</option><option selected>21:00</option><option>22:00</option><option>23:00</option></select></label>
+      <label>Personas<select name="personas"><option>2 personas</option><option>3 personas</option><option>4 personas</option><option>5 a 8 personas</option><option>Más de 8</option></select></label>
+      <button class="boton boton--oro" type="submit">Reservar por WhatsApp</button>
+    </form>
+    <p class="reserva-alt revela">¿Prefieres llamar? <a href="tel:+56951645582">+56 9 5164 5582</a></p>
     <div class="visita-datos revela">
       <div><span class="eti">Dónde</span><p>Concón<br>Región de Valparaíso</p></div>
       <div><span class="eti">Cuándo</span><p>Todos los días<br>12:30 — 00:30</p></div>

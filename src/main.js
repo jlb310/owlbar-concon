@@ -63,3 +63,16 @@ const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
   if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
 }), { rootMargin: '0px 0px -8% 0px' });
 document.querySelectorAll('.revela').forEach((el) => io.observe(el));
+
+// Reserva: arma el mensaje de WhatsApp con nombre, fecha, hora y personas.
+const form = document.getElementById('form-reserva');
+const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Santiago' });
+form.fecha.min = hoy;
+form.fecha.value = hoy;
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = new FormData(form);
+  const [a, m, d] = String(f.get('fecha')).split('-');
+  const texto = `Hola OWL BAR, soy ${f.get('nombre')}. Quiero reservar una mesa para ${f.get('personas')} el ${d}/${m}/${a} a las ${f.get('hora')}. ¿Me confirman?`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+});
