@@ -2,5 +2,5 @@
   "name": "owlbar-concon",
   "private": true,
   "type": "module",
-  "description": "Landing de OWL BAR (Concón). Sitio estático: index.html, styles.css y src/main.js."
+  "description": "Demo de Spacehost para OWL BAR (Concón): carta digital, pedido online con seguimiento en vivo y sus administradores. Sitio estático; la landing anterior está en /landing/."
 }

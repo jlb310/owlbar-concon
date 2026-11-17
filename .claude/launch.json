@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "owlbar", "runtimeExecutable": "npx", "runtimeArgs": ["--yes", "serve@14.2.4", ".", "-l", "4330"], "port": 4330 }
+  ]
+}
